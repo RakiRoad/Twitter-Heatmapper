@@ -1,6 +1,7 @@
+//map portion
 var map;
-//var src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBqAXms_J6NyGgnDNchEgjMEvGTB0m9YGs&libraries=visualization&callback=initMap";
 
+//Initializes the map and centers it on the United States
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 5,
@@ -14,20 +15,22 @@ function initMap() {
   // Create a <script> tag and set the USGS URL as the source.
   var script = document.createElement('script');
 
-  // This example uses a local copy of the GeoJSON stored at
-  // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
   script.src = 'scripts/meme.js';
   document.getElementsByTagName('head')[0].appendChild(script);
 
 }
 
-function eqfeed_callback(results) {
-  var heatmapData = [];
-  for (var i = 0; i < results.features.length; i++) {
-    var coords = results.features[i].geometry.coordinates;
+function eqfeed_callback(results) { //the results is the stuff inside the eqfeed_callback function from the source
+  var heatmapData = []; //declares the array coordinates will be stored to
+
+  for (var i = 0; i < results.info.length; i++) {
+    var coords = results.info[i].coordinates; //stores all the coordinates from file by going through json stuff
+    //var coords = results[i].coordinates;
     var latLng = new google.maps.LatLng(coords[1], coords[0]);
-    heatmapData.push(latLng);
+    heatmapData.push(latLng); //pushed all the coordinate data to array
+
   }
+
   var heatmap = new google.maps.visualization.HeatmapLayer({
     data: heatmapData,
     dissipating: false,
@@ -35,43 +38,3 @@ function eqfeed_callback(results) {
   });
 }
 
-
-
-/*
-    <script>
-      var map;
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 5,
-          center: {lat: 38.52, lng: -98.35},
-          mapTypeId: 'terrain'
-        });
-
-        // Create a <script> tag and set the USGS URL as the source.
-        var script = document.createElement('script');
-
-        // This example uses a local copy of the GeoJSON stored at
-        // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
-        script.src = 'meme.js';
-        document.getElementsByTagName('head')[0].appendChild(script);
-
-      }
-
-      function eqfeed_callback(results) {
-        var heatmapData = [];
-        for (var i = 0; i < results.features.length; i++) {
-          var coords = results.features[i].geometry.coordinates;
-          var latLng = new google.maps.LatLng(coords[1], coords[0]);
-          heatmapData.push(latLng);
-        }
-        var heatmap = new google.maps.visualization.HeatmapLayer({
-          data: heatmapData,
-          dissipating: false,
-          map: map
-        });
-      }
-    </script>
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqAXms_J6NyGgnDNchEgjMEvGTB0m9YGs&libraries=visualization&callback=initMap">
-    </script>
-    */
