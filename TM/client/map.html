@@ -1,0 +1,71 @@
+<!-- Template is defined for flow routing -->
+<template name="GHeatMap">
+
+<head>
+  <style>
+    /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+
+    #map {
+      height: 100%;
+    }
+    /* Optional: Makes the sample page fill the window. */
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="map">
+    <script>
+      //map portion
+    var map;
+
+    //Initializes the map and centers it on the United States
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 5,
+        center: {
+          lat: 38.52,
+          lng: -98.35
+        },
+        mapTypeId: 'terrain'
+      });
+
+      var heatmapData = []; //declares the array coordinates will be stored to
+
+
+      //USING THE METEOR CALL METHODS
+      
+      Meteor.call("coors_one", function(err, res) { // used to retrieve array from server method
+        //console.log(res);
+        for (var i = 0; i < res.length; i++) { 
+          console.log(res[i].coordinates);
+          var coords = res[i].coordinates; //retrieves coordinate objects
+          var latLng = new google.maps.LatLng(coords[1], coords[0]); //formats coordinates to the way googlemaps reads data
+          heatmapData.push(latLng); //pushed all the coordinate data to array
+
+        }
+
+        //Displays where the heatmaps points should be placed
+        var heatmap = new google.maps.visualization.HeatmapLayer({
+        data: heatmapData,
+        dissipating: false,
+        map: map
+        });
+      })
+      console.log(heatmapData);  
+
+    }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqAXms_J6NyGgnDNchEgjMEvGTB0m9YGs&libraries=visualization&callback=initMap">
+    </script> 
+  </div>
+</body>
+
+</template>
