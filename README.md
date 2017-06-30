@@ -1,4 +1,4 @@
-# Twitter-Mapper
+# Twitter-HeatMapper
 
 
 This web app uses the Twitter API and the Google Heatmap API.
